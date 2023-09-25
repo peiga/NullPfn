@@ -66,8 +66,6 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DrvObject, PUNICODE_STRING RegistryPath) {
 NTSTATUS MemeNullingPfn(PVOID BaseAddress, SIZE_T NumberOfBytes)
 {
 	PMDL mdl = IoAllocateMdl(BaseAddress, (ULONG)NumberOfBytes, FALSE, FALSE, NULL);
-	UNREFERENCED_PARAMETER(NumberOfBytes);
-
 	PPFN_NUMBER mdl_pages = MmGetMdlPfnArray(mdl);
 	NTSTATUS Status = STATUS_UNSUCCESSFUL;
 	if (!mdl_pages) {
