@@ -40,7 +40,7 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DrvObject, PUNICODE_STRING RegistryPath) {
 
 		DbgPrint("[+] Translating result before nulling: 0x%llX.", PhysicalAddress.QuadPart);
 
-		Status = MemeNullingPfn(BaseAddress, PAGE_SIZE);
+		Status = MemeNullingPfn(AllocatedMdl, PAGE_SIZE);
 		if NT_SUCCESS(Status) {
 			PhysicalAddress = MmGetPhysicalAddress(BaseAddress);
 
@@ -68,6 +68,8 @@ NTSTATUS DriverEntry(PDRIVER_OBJECT DrvObject, PUNICODE_STRING RegistryPath) {
 NTSTATUS MemeNullingPfn(PVOID BaseAddress, SIZE_T NumberOfBytes)
 {
 	PMDL mdl = IoAllocateMdl(BaseAddress, (ULONG)NumberOfBytes, FALSE, FALSE, NULL);
+	UNREFERENCED_PARAMETER(NumberOfBytes);
+
 	PPFN_NUMBER mdl_pages = MmGetMdlPfnArray(mdl);
 	NTSTATUS Status = STATUS_UNSUCCESSFUL;
 	if (!mdl_pages) {
